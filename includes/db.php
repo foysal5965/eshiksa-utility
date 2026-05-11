@@ -1,18 +1,15 @@
 <?php
-$host = getenv('DB_HOST');
-$port = getenv('DB_PORT');
-$db   = getenv('DB_NAME');
-$user = getenv('DB_USER');
-$pass = getenv('DB_PASS');
+$host = 'gateway01.ap-southeast-1.prod.alicloud.tidbcloud.com';
+$db   = 'sys'; // The database name you used in phpMyAdmin
+$user = '2aQth8dhqeE6RHh.root';
+$pass = 'ReeTPS4tMbBpIfQ1';
+$charset = 'utf8mb4';
 
 $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
 $options = [
     PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
     PDO::ATTR_EMULATE_PREPARES   => false,
-    // Aiven strictly requires this SSL certificate to connect
-    PDO::MYSQL_ATTR_SSL_CA       => __DIR__ . '/ca.pem',
-    PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT => false,
 ];
 
 try {
