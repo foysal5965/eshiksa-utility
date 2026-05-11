@@ -1,24 +1,22 @@
 <?php
 // ==========================================
-// 1. DATABASE CONNECTION (SECURE VERCEL WAY)
+// 1. DATABASE CONNECTION
 // ==========================================
 
-// Fetch from Vercel Environment Variables
-// $host = getenv('DB_HOST');
-// $port = getenv('DB_PORT') ?: 4000;
-// $db   = getenv('DB_NAME');
-// $user = getenv('DB_USER');
-// $pass = getenv('DB_PASS');
-$host = getenv('DB_HOST');
-$port = getenv('DB_PORT') ?: 4000;
-$db   = getenv('DB_NAME');
-$user = getenv('DB_USER');
-$pass = getenv('DB_PASS');
+// We are hardcoding the credentials from your screenshot so you can test it immediately.
+// (Remember to change this password in TiDB later once everything is working!)
+$host = 'gateway01.ap-southeast-1.prod.alicloud.tidbcloud.com';
+$port = 4000;
+$db   = 'sys'; 
+$user = '2aQth8dhqeE6RHh.root';
+$pass = 'ReeTPS4tMbBpIfQ1';
 
-$dsn = "mysql://2aQth8dhqeE6RHh.root:ReeTPS4tMbBpIfQ1@gateway01.ap-southeast-1.prod.alicloud.tidbcloud.com:4000/sys";
+// This is the correct format PHP PDO expects:
+$dsn = "mysql:host=$host;port=$port;dbname=$db;charset=utf8mb4";
 
 // THE NUCLEAR FIX: Point directly to the downloaded cacert.pem file
-// Make sure cacert.pem is saved in the same 'includes/' folder as this db.php file!
+// Look at your screenshot: Click that blue "Download the CA cert" link!
+// Save it as 'cacert.pem' inside your 'includes/' folder.
 $ca_path = __DIR__ . '/cacert.pem';
 
 $options = [
@@ -26,7 +24,7 @@ $options = [
     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
     PDO::ATTR_EMULATE_PREPARES   => false,
     
-    // Force Secure TLS Connection (REQUIRED for TiDB) using our local file
+    // Force Secure TLS Connection using your local file
     PDO::MYSQL_ATTR_SSL_CA       => $ca_path,
     PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT => false, 
 ];
@@ -38,11 +36,10 @@ try {
 }
 
 // ==========================================
-// 2. ENCRYPTION FUNCTIONS (BUG FIXED)
+// 2. ENCRYPTION FUNCTIONS
 // ==========================================
 
 // !! Change this to a long, random string and keep it safe !!
-// If you ever change this string later, ALL your encrypted data will be unreadable.
 define('ENCRYPTION_KEY', 'put-a-very-long-random-string-here-12345');
 
 /**
@@ -51,11 +48,9 @@ define('ENCRYPTION_KEY', 'put-a-very-long-random-string-here-12345');
 function encrypt_data($data) {
     $cipher = "AES-256-CBC";
     $iv_length = openssl_cipher_iv_length($cipher);
-    // Generate the unique IV INSIDE the function
     $iv = openssl_random_pseudo_bytes($iv_length); 
     
     $encrypted = openssl_encrypt($data, $cipher, ENCRYPTION_KEY, 0, $iv);
-    // Return IV combined with encrypted data
     return base64_encode($iv . $encrypted);
 }
 
@@ -67,7 +62,6 @@ function decrypt_data($data) {
     $data = base64_decode($data);
     
     $iv_length = openssl_cipher_iv_length($cipher);
-    // Extract the exact IV that was used when it was encrypted
     $iv = substr($data, 0, $iv_length);
     $encrypted = substr($data, $iv_length);
     
