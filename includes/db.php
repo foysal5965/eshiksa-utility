@@ -4,13 +4,18 @@
 // ==========================================
 
 // Fetch from Vercel Environment Variables
+// $host = getenv('DB_HOST');
+// $port = getenv('DB_PORT') ?: 4000;
+// $db   = getenv('DB_NAME');
+// $user = getenv('DB_USER');
+// $pass = getenv('DB_PASS');
 $host = getenv('DB_HOST');
 $port = getenv('DB_PORT') ?: 4000;
 $db   = getenv('DB_NAME');
 $user = getenv('DB_USER');
 $pass = getenv('DB_PASS');
 
-$dsn = "mysql:host=$host;port=$port;dbname=$db;charset=utf8mb4";
+$dsn = "mysql://2aQth8dhqeE6RHh.root:ReeTPS4tMbBpIfQ1@gateway01.ap-southeast-1.prod.alicloud.tidbcloud.com:4000/sys";
 
 // THE NUCLEAR FIX: Point directly to the downloaded cacert.pem file
 // Make sure cacert.pem is saved in the same 'includes/' folder as this db.php file!
