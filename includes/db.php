@@ -12,17 +12,16 @@ $pass = getenv('DB_PASS');
 
 $dsn = "mysql:host=$host;port=$port;dbname=$db;charset=utf8mb4";
 
-// Dynamically find the SSL certificate based on the server's operating system
-$ca_path = '/etc/pki/tls/certs/ca-bundle.crt'; // Vercel / Amazon Linux path
-if (!file_exists($ca_path)) {
-    $ca_path = '/etc/ssl/certs/ca-certificates.crt'; // Ubuntu / Debian fallback
-}
+// THE NUCLEAR FIX: Point directly to the downloaded cacert.pem file
+// Make sure cacert.pem is saved in the same 'includes/' folder as this db.php file!
+$ca_path = __DIR__ . '/cacert.pem';
 
 $options = [
     PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
     PDO::ATTR_EMULATE_PREPARES   => false,
-    // Force Secure TLS Connection (REQUIRED for TiDB)
+    
+    // Force Secure TLS Connection (REQUIRED for TiDB) using our local file
     PDO::MYSQL_ATTR_SSL_CA       => $ca_path,
     PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT => false, 
 ];
