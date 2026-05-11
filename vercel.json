@@ -1,0 +1,26 @@
+{
+  "builds": [
+    {
+      "src": "*.php",
+      "use": "vercel-php@0.6.2"
+    },
+    {
+      "src": "handlers/*.php",
+      "use": "vercel-php@0.6.2"
+    },
+    {
+      "src": "assets/**",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/includes/(.*)",
+      "status": 403
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/$1"
+    }
+  ]
+}
