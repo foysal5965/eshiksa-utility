@@ -7,7 +7,7 @@
 // (Remember to change this password in TiDB later once everything is working!)
 $host = 'gateway01.ap-southeast-1.prod.alicloud.tidbcloud.com';
 $port = 4000;
-$db   = 'sys'; 
+$db   = 'test'; 
 $user = '2aQth8dhqeE6RHh.root';
 $pass = 'ReeTPS4tMbBpIfQ1';
 
