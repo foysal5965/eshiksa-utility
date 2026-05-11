@@ -2,7 +2,8 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
-require '../includes/db.php';
+require __DIR__ . '/../includes/db.php';
+require __DIR__ . '/../includes/functions.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = $_POST['username'];
